@@ -2,7 +2,6 @@ import * as express from 'express'
 import * as cors from 'cors'
 import * as http from 'http'
 import {QueryResult, Client} from 'pg'
-// import { doQuery } from './query.service'
 
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
@@ -72,8 +71,4 @@ export class StockDatabaseServer {
             })
         })
     }
-
-    
-
-    
 }

@@ -5,7 +5,6 @@ var express = require("express");
 var cors = require("cors");
 var http = require("http");
 var pg_1 = require("pg");
-// import { doQuery } from './query.service'
 var StockDatabaseServer = /** @class */ (function () {
     function StockDatabaseServer() {
         this.createApp();
