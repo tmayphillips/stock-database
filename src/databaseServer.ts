@@ -49,7 +49,10 @@ export class StockDatabaseServer {
     public static doQuery = (query: string): Promise<QueryResult>=>{
         return new Promise((resolve, reject)=>{
             const client: Client = new Client({
-                connectionString: 'postgres://vujwyosxlhitrw:8e2e84a5507c45cf3c54802e97948abd2ebb73ad29453ec3558f64cbe02469e7@ec2-3-228-236-221.compute-1.amazonaws.com:5432/djvd7ebilq70q'
+                connectionString: 'postgres://vujwyosxlhitrw:8e2e84a5507c45cf3c54802e97948abd2ebb73ad29453ec3558f64cbe02469e7@ec2-3-228-236-221.compute-1.amazonaws.com:5432/djvd7ebilq70q',
+                ssl: {
+                    rejectUnauthorized: false
+                }
             })
             client.connect((connectError: Error)=>{
                 if(connectError)

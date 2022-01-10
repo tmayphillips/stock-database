@@ -41,7 +41,10 @@ var StockDatabaseServer = /** @class */ (function () {
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
             var client = new pg_1.Client({
-                connectionString: 'postgres://vujwyosxlhitrw:8e2e84a5507c45cf3c54802e97948abd2ebb73ad29453ec3558f64cbe02469e7@ec2-3-228-236-221.compute-1.amazonaws.com:5432/djvd7ebilq70q'
+                connectionString: 'postgres://vujwyosxlhitrw:8e2e84a5507c45cf3c54802e97948abd2ebb73ad29453ec3558f64cbe02469e7@ec2-3-228-236-221.compute-1.amazonaws.com:5432/djvd7ebilq70q',
+                ssl: {
+                    rejectUnauthorized: false
+                }
             });
             client.connect(function (connectError) {
                 if (connectError)
