@@ -1,2 +1,5 @@
-AAPL file created with record count 48
-TSLA file created with record count 48
+INTC file created with record count 4709
+COP file created with record count 3612
+CVX file created with record count 3694
+RDS.A file created with record count 3931
+OXY file created with record count 3930
