@@ -23,9 +23,12 @@ var StockDatabaseServer = /** @class */ (function () {
             console.log('Running server on port %s', _this.port);
         });
         try {
-            StockDatabaseServer.doQuery('SELECT * FROM min5_prices')
+            StockDatabaseServer.doQuery("SELECT * FROM min5_prices WHERE Symbol = 'AAPL' ")
                 .then(function (resp) {
-                return console.log('this is the db response ', resp);
+                var getAaplData = function (request, response, next) {
+                    response.status(200).json(resp);
+                };
+                _this.app.get('/aapl/5/minute', getAaplData);
             });
         }
         catch (e) {

@@ -11,6 +11,7 @@ export class StockDatabaseServer {
     private server: http.Server
     private port: string | number
     private connectionString: string
+    private data: {}
 
     constructor() {
         this.createApp()
@@ -30,13 +31,22 @@ export class StockDatabaseServer {
             console.log('Running server on port %s', this.port)
         })
 
-        try{StockDatabaseServer.doQuery('SELECT * FROM min5_prices')
-        .then((resp: QueryResult)=>
-        console.log('this is the db response ', resp)
+        try{StockDatabaseServer.doQuery("SELECT * FROM min5_prices WHERE Symbol = 'AAPL' ")
+        .then((resp: QueryResult)=>  {
+            const getAaplData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+                response.status(200).json(resp)
+            }
+            this.app.get('/aapl/5/minute', getAaplData)
+            }
         )}
         catch(e){
             console.log('failed')
         }
+
+
+        
+
+
 
 
     }
