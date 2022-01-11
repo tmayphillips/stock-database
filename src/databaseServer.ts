@@ -11,7 +11,6 @@ export class StockDatabaseServer {
     private server: http.Server
     private port: string | number
     private connectionString: string
-    private data: {}
 
     constructor() {
         this.createApp()
@@ -42,13 +41,6 @@ export class StockDatabaseServer {
         catch(e){
             console.log('failed')
         }
-
-
-        
-
-
-
-
     }
 
     public getApp(): express.Application {
