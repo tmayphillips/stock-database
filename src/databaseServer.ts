@@ -33,7 +33,8 @@ export class StockDatabaseServer {
         try{StockDatabaseServer.doQuery("SELECT * FROM min5_prices WHERE Symbol = 'AAPL' ")
         .then((resp: QueryResult)=>  {
             const getAaplData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                response.status(200).json(resp)
+                console.log(resp.rows)
+                response.status(200).json(resp.rows)
             }
             this.app.get('/aapl/5/minute', getAaplData)
             }

@@ -26,7 +26,8 @@ var StockDatabaseServer = /** @class */ (function () {
             StockDatabaseServer.doQuery("SELECT * FROM min5_prices WHERE Symbol = 'AAPL' ")
                 .then(function (resp) {
                 var getAaplData = function (request, response, next) {
-                    response.status(200).json(resp);
+                    console.log(resp.rows);
+                    response.status(200).json(resp.rows);
                 };
                 _this.app.get('/aapl/5/minute', getAaplData);
             });
