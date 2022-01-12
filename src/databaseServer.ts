@@ -5,7 +5,7 @@ import {QueryResult, Client} from 'pg'
 
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
-    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC', 'NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'RDS.A', 'OXY', 'BP', 'MPC', 'SLB', 'PSX', 'VLO']
+    public static readonly SYMBOLS: string[] = ['AAPL']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
 
     private app: express.Application
@@ -31,17 +31,19 @@ export class StockDatabaseServer {
             console.log('Running server on port %s', this.port)
         })
 
-
         StockDatabaseServer.SYMBOLS.forEach((symbol) => {
             StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
+                console.log(`"SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}' "`)
                 try{StockDatabaseServer.doQuery(`"SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}' "`)
                     .then((resp: QueryResult)=>  {
                         const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
                         console.log(resp.rows)
                         response.status(200).json(resp.rows)
                         }
+                        this.app.get(`/${symbol}/5/minute`, getStockData);
                         switch(timeframe) {
                             case 'min5': 
+                                console.log(`/${symbol}/5/minute`)
                                 this.app.get(`/${symbol}/5/minute`, getStockData);
                                 break;
                             case 'min15': 
@@ -54,7 +56,6 @@ export class StockDatabaseServer {
                                 this.app.get(`/${symbol}/1/day`, getStockData);
                                 break;
                         }
-
                     }
                 )}
                 catch(e){
@@ -83,17 +84,18 @@ export class StockDatabaseServer {
                     // return reject(connectError.message)
                     console.log('error')
     
-                client.query(query, (queryError: Error, queryResult: QueryResult)=>{
-                    if(queryError)
-                        // return reject(queryError.message+`(${query})`)
-                        return reject(queryError.message)
-    
-                    client.end((endError: Error)=>{
-                        return reject(endError? endError.message : 'error on client.end')
-                    })
-                    resolve(queryResult)
-                })
+            client.query(query, (queryError: Error, queryResult: QueryResult)=>{
+                if(queryError)
+                    // return reject(queryError.message+`(${query})`)
+                    return reject(queryError.message)
+
+            // client.end((endError: Error)=>{
+            //     return reject(endError? endError.message : 'error on client.end')
+            // })
+            resolve(queryResult)
             })
+            })
+            client.end()
         })
     }
 }

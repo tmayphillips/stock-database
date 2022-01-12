@@ -24,6 +24,7 @@ var StockDatabaseServer = /** @class */ (function () {
         });
         StockDatabaseServer.SYMBOLS.forEach(function (symbol) {
             StockDatabaseServer.TIMEFRAMES.forEach(function (timeframe) {
+                console.log("\"SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "' \""));
                 try {
                     StockDatabaseServer.doQuery("\"SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "' \""))
                         .then(function (resp) {
@@ -31,8 +32,10 @@ var StockDatabaseServer = /** @class */ (function () {
                             console.log(resp.rows);
                             response.status(200).json(resp.rows);
                         };
+                        _this.app.get("/".concat(symbol, "/5/minute"), getStockData);
                         switch (timeframe) {
                             case 'min5':
+                                console.log("/".concat(symbol, "/5/minute"));
                                 _this.app.get("/".concat(symbol, "/5/minute"), getStockData);
                                 break;
                             case 'min15':
@@ -57,7 +60,7 @@ var StockDatabaseServer = /** @class */ (function () {
         return this.app;
     };
     StockDatabaseServer.PORT = 8080; // Default local port
-    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC', 'NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'RDS.A', 'OXY', 'BP', 'MPC', 'SLB', 'PSX', 'VLO'];
+    StockDatabaseServer.SYMBOLS = ['AAPL'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
@@ -75,12 +78,13 @@ var StockDatabaseServer = /** @class */ (function () {
                     if (queryError)
                         // return reject(queryError.message+`(${query})`)
                         return reject(queryError.message);
-                    client.end(function (endError) {
-                        return reject(endError ? endError.message : 'error on client.end');
-                    });
+                    // client.end((endError: Error)=>{
+                    //     return reject(endError? endError.message : 'error on client.end')
+                    // })
                     resolve(queryResult);
                 });
             });
+            client.end();
         });
     };
     return StockDatabaseServer;
