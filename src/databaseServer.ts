@@ -5,7 +5,7 @@ import {QueryResult, Client} from 'pg'
 
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
-    public static readonly SYMBOLS: string[] = ['AAPL']
+    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
 
     private app: express.Application

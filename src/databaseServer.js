@@ -65,7 +65,7 @@ var StockDatabaseServer = /** @class */ (function () {
         return this.app;
     };
     StockDatabaseServer.PORT = 8080; // Default local port
-    StockDatabaseServer.SYMBOLS = ['AAPL'];
+    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
