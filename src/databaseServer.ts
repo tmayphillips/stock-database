@@ -6,6 +6,7 @@ import {QueryResult, Client} from 'pg'
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
     public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC', 'NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'RDS.A', 'OXY', 'BP', 'MPC', 'SLB', 'PSX', 'VLO']
+    public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
 
     private app: express.Application
     private server: http.Server
@@ -30,18 +31,39 @@ export class StockDatabaseServer {
             console.log('Running server on port %s', this.port)
         })
 
-        try{StockDatabaseServer.doQuery("SELECT * FROM min5_prices WHERE Symbol = 'AAPL' ")
-        .then((resp: QueryResult)=>  {
-            const getAaplData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                console.log(resp.rows)
-                response.status(200).json(resp.rows)
-            }
-            this.app.get('/aapl/5/minute', getAaplData)
-            }
-        )}
-        catch(e){
-            console.log('failed')
-        }
+
+        StockDatabaseServer.SYMBOLS.forEach((symbol) => {
+            StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
+                try{StockDatabaseServer.doQuery(`"SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}' "`)
+                    .then((resp: QueryResult)=>  {
+                        const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+                        console.log(resp.rows)
+                        response.status(200).json(resp.rows)
+                        }
+                        switch(timeframe) {
+                            case 'min5': 
+                                this.app.get(`/${symbol}/5/minute`, getStockData);
+                                break;
+                            case 'min15': 
+                                this.app.get(`/${symbol}/15/minute`, getStockData);
+                                break;
+                            case 'hour': 
+                                this.app.get(`/${symbol}/1/hour`, getStockData);
+                                break;
+                            case 'daily': 
+                                this.app.get(`/${symbol}/1/day`, getStockData);
+                                break;
+                        }
+
+                    }
+                )}
+                catch(e){
+                    console.log('failed')
+                }
+            })
+            
+        })
+        
     }
 
     public getApp(): express.Application {
