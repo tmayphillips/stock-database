@@ -1,5 +1,5 @@
-INTC file created with record count 4709
-COP file created with record count 3612
-CVX file created with record count 3694
-RDS.A file created with record count 3931
-OXY file created with record count 3930
+AAPL file created with record count 259
+TSLA file created with record count 259
+NVDA file created with record count 259
+JPM file created with record count 259
+BAC file created with record count 259
