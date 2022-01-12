@@ -32,28 +32,33 @@ export class StockDatabaseServer {
         })
 
         StockDatabaseServer.SYMBOLS.forEach((symbol) => {
+            console.log(symbol)
             StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
-                console.log(`"SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}' "`)
-                try{StockDatabaseServer.doQuery(`"SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}' "`)
+                console.log(timeframe)
+                try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
                     .then((resp: QueryResult)=>  {
+                        console.log('.then')
                         const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
                         console.log(resp.rows)
                         response.status(200).json(resp.rows)
                         }
-                        this.app.get(`/${symbol}/5/minute`, getStockData);
+                        console.log(getStockData)
                         switch(timeframe) {
                             case 'min5': 
                                 console.log(`/${symbol}/5/minute`)
-                                this.app.get(`/${symbol}/5/minute`, getStockData);
+                                this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
                                 break;
                             case 'min15': 
-                                this.app.get(`/${symbol}/15/minute`, getStockData);
+                                console.log(`/${symbol}/15/minute`)
+                                this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
                                 break;
                             case 'hour': 
-                                this.app.get(`/${symbol}/1/hour`, getStockData);
+                                console.log(`/${symbol}/1/hour`)
+                                this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
                                 break;
                             case 'daily': 
-                                this.app.get(`/${symbol}/1/day`, getStockData);
+                                console.log(`/${symbol}/1/day`)
+                                this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
                                 break;
                         }
                     }
@@ -88,14 +93,14 @@ export class StockDatabaseServer {
                 if(queryError)
                     // return reject(queryError.message+`(${query})`)
                     return reject(queryError.message)
-
-            // client.end((endError: Error)=>{
-            //     return reject(endError? endError.message : 'error on client.end')
-            // })
+            
+            client.end((endError: Error)=>{
+                return reject(endError? endError.message : 'error on client.end')
+            })
             resolve(queryResult)
             })
             })
-            client.end()
+            
         })
     }
 }

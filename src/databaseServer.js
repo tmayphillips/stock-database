@@ -23,29 +23,34 @@ var StockDatabaseServer = /** @class */ (function () {
             console.log('Running server on port %s', _this.port);
         });
         StockDatabaseServer.SYMBOLS.forEach(function (symbol) {
+            console.log(symbol);
             StockDatabaseServer.TIMEFRAMES.forEach(function (timeframe) {
-                console.log("\"SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "' \""));
+                console.log(timeframe);
                 try {
-                    StockDatabaseServer.doQuery("\"SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "' \""))
+                    StockDatabaseServer.doQuery("SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "'"))
                         .then(function (resp) {
+                        console.log('.then');
                         var getStockData = function (request, response, next) {
                             console.log(resp.rows);
                             response.status(200).json(resp.rows);
                         };
-                        _this.app.get("/".concat(symbol, "/5/minute"), getStockData);
+                        console.log(getStockData);
                         switch (timeframe) {
                             case 'min5':
                                 console.log("/".concat(symbol, "/5/minute"));
-                                _this.app.get("/".concat(symbol, "/5/minute"), getStockData);
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/5/minute"), getStockData);
                                 break;
                             case 'min15':
-                                _this.app.get("/".concat(symbol, "/15/minute"), getStockData);
+                                console.log("/".concat(symbol, "/15/minute"));
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/15/minute"), getStockData);
                                 break;
                             case 'hour':
-                                _this.app.get("/".concat(symbol, "/1/hour"), getStockData);
+                                console.log("/".concat(symbol, "/1/hour"));
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
                                 break;
                             case 'daily':
-                                _this.app.get("/".concat(symbol, "/1/day"), getStockData);
+                                console.log("/".concat(symbol, "/1/day"));
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/day"), getStockData);
                                 break;
                         }
                     });
@@ -78,13 +83,12 @@ var StockDatabaseServer = /** @class */ (function () {
                     if (queryError)
                         // return reject(queryError.message+`(${query})`)
                         return reject(queryError.message);
-                    // client.end((endError: Error)=>{
-                    //     return reject(endError? endError.message : 'error on client.end')
-                    // })
+                    client.end(function (endError) {
+                        return reject(endError ? endError.message : 'error on client.end');
+                    });
                     resolve(queryResult);
                 });
             });
-            client.end();
         });
     };
     return StockDatabaseServer;
