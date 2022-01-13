@@ -5,8 +5,10 @@ import {QueryResult, Client} from 'pg'
 
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
-    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA']
+    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
+    // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
+    public static readonly TICKERS:string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC','NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO']
 
     private app: express.Application
     private server: http.Server
@@ -59,6 +61,10 @@ export class StockDatabaseServer {
                 }
             })
 
+            
+        })
+
+        StockDatabaseServer.TICKERS.forEach((symbol) => {
             try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
                 .then((resp: QueryResult)=>  {
                     const getTickerInfo = (request: express.Request, response: express.Response, next: express.NextFunction) => {
@@ -67,10 +73,10 @@ export class StockDatabaseServer {
                 
                     this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
                 }
-            )}
-            catch(e){
-                console.log('failed')
-            }
+                )}
+                catch(e){
+                    console.log('failed')
+                }
         })
     }
 
@@ -88,7 +94,7 @@ export class StockDatabaseServer {
             })
             client.connect((connectError: Error)=>{
                 if(connectError)
-                    // return reject(connectError.message)
+                    return reject(connectError.message)
                     console.log('error')
     
             client.query(query, (queryError: Error, queryResult: QueryResult)=>{

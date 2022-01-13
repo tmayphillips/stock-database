@@ -50,6 +50,8 @@ var StockDatabaseServer = /** @class */ (function () {
                     console.log('failed');
                 }
             });
+        });
+        StockDatabaseServer.TICKERS.forEach(function (symbol) {
             try {
                 StockDatabaseServer.doQuery("SELECT * FROM tickers WHERE Ticker = '".concat(symbol.toUpperCase(), "'"))
                     .then(function (resp) {
@@ -68,8 +70,10 @@ var StockDatabaseServer = /** @class */ (function () {
         return this.app;
     };
     StockDatabaseServer.PORT = 8080; // Default local port
-    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA'];
+    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
+    // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
+    StockDatabaseServer.TICKERS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC', 'NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
             var client = new pg_1.Client({
@@ -80,8 +84,8 @@ var StockDatabaseServer = /** @class */ (function () {
             });
             client.connect(function (connectError) {
                 if (connectError)
-                    // return reject(connectError.message)
-                    console.log('error');
+                    return reject(connectError.message);
+                console.log('error');
                 client.query(query, function (queryError, queryResult) {
                     if (queryError)
                         // return reject(queryError.message+`(${query})`)
