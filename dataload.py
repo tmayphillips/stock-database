@@ -98,8 +98,8 @@ def process_symbols():
     # symbols = ['MSFT', 'FB', 'AMZN', 'GS', 'MS']
     # symbols = ['V', 'GME', 'NFLX', 'KO', 'JNJ']
     # symbols = ['CRM', 'PYPL', 'XOM', 'HD', 'DIS']
-    # symbols = ['INTC', 'COP', 'CVX', 'RDS.A', 'OXY']
-    # symbols = ['BP', 'MPC', 'SLB', 'PSX', 'VLO']
+    # symbols = ['INTC', 'COP', 'CVX', 'SBUX', 'OXY']
+    # symbols = ['WMT', 'MPC', 'SLB', 'PSX', 'VLO']
 
     for symbol in tqdm_notebook(symbols, desc='Importing...'):
         import_bar_file(symbol)
@@ -117,7 +117,7 @@ def process_tickers():
     df = pd.read_csv('{}/ticker-list.csv'.format(tickers_path))
 
     # Formatting
-    df = df[['ticker', 'name', 'locale', 'primary_exchange', 'type', 'currency_name', 'phone_number', 'address', 'city', 'state', 'postal_code', 'homepage_url', 'logo_url', 'icon_url', 'sic_description', 'description']]
+    df = df[['ticker', 'name', 'phone_number', 'address', 'city', 'state', 'postal_code', 'homepage_url', 'sic_description', 'description']]
     # df.rename(columns={'ticker': 'symbol', 'name': 'symbol_name', 'primaryExch': 'primary_exch'}, inplace=True)
     df['updated'] = pd.to_datetime('now')
 
