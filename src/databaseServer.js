@@ -22,35 +22,34 @@ var StockDatabaseServer = /** @class */ (function () {
         this.server.listen(this.port, function () {
             console.log('Running server on port %s', _this.port);
         });
-        StockDatabaseServer.SYMBOLS.forEach(function (symbol) {
-            StockDatabaseServer.TIMEFRAMES.forEach(function (timeframe) {
-                try {
-                    StockDatabaseServer.doQuery("SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "'"))
-                        .then(function (resp) {
-                        var getStockData = function (request, response, next) {
-                            response.status(200).json(resp.rows);
-                        };
-                        switch (timeframe) {
-                            case 'min5':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/5/minute"), getStockData);
-                                break;
-                            case 'min15':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/15/minute"), getStockData);
-                                break;
-                            case 'hour':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
-                                break;
-                            case 'daily':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/day"), getStockData);
-                                break;
-                        }
-                    });
-                }
-                catch (e) {
-                    console.log('failed');
-                }
-            });
-        });
+        // StockDatabaseServer.SYMBOLS.forEach((symbol) => {
+        //     StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
+        //         try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
+        //             .then((resp: QueryResult)=>  {
+        //                 const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        //                     response.status(200).json(resp.rows)
+        //                 }
+        //                 switch(timeframe) {
+        //                     case 'min5': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
+        //                         break;
+        //                     case 'min15': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
+        //                         break;
+        //                     case 'hour': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
+        //                         break;
+        //                     case 'daily': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
+        //                         break;
+        //                 }
+        //             }
+        //         )}
+        //         catch(e){
+        //             console.log('failed')
+        //         }
+        //     })
+        // })
         StockDatabaseServer.TICKERS.forEach(function (symbol) {
             try {
                 StockDatabaseServer.doQuery("SELECT * FROM tickers WHERE Ticker = '".concat(symbol.toUpperCase(), "'"))
@@ -73,7 +72,7 @@ var StockDatabaseServer = /** @class */ (function () {
     StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
     // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
-    StockDatabaseServer.TICKERS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC', 'NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO'];
+    StockDatabaseServer.TICKERS = ['JPM'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
             var client = new pg_1.Client({
@@ -85,7 +84,6 @@ var StockDatabaseServer = /** @class */ (function () {
             client.connect(function (connectError) {
                 if (connectError)
                     return reject(connectError.message);
-                console.log('error');
                 client.query(query, function (queryError, queryResult) {
                     if (queryError)
                         // return reject(queryError.message+`(${query})`)

@@ -8,7 +8,8 @@ export class StockDatabaseServer {
     public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
     // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
-    public static readonly TICKERS:string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC','NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO']
+    public static readonly TICKERS:string[] = ['JPM']
+    // public static readonly TICKERS:string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC','NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO']
 
     private app: express.Application
     private server: http.Server
@@ -33,36 +34,36 @@ export class StockDatabaseServer {
             console.log('Running server on port %s', this.port)
         })
 
-        StockDatabaseServer.SYMBOLS.forEach((symbol) => {
-            StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
-                try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
-                    .then((resp: QueryResult)=>  {
-                        const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                            response.status(200).json(resp.rows)
-                        }
-                        switch(timeframe) {
-                            case 'min5': 
-                                this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
-                                break;
-                            case 'min15': 
-                                this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
-                                break;
-                            case 'hour': 
-                                this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
-                                break;
-                            case 'daily': 
-                                this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
-                                break;
-                        }
-                    }
-                )}
-                catch(e){
-                    console.log('failed')
-                }
-            })
+        // StockDatabaseServer.SYMBOLS.forEach((symbol) => {
+        //     StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
+        //         try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
+        //             .then((resp: QueryResult)=>  {
+        //                 const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        //                     response.status(200).json(resp.rows)
+        //                 }
+        //                 switch(timeframe) {
+        //                     case 'min5': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
+        //                         break;
+        //                     case 'min15': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
+        //                         break;
+        //                     case 'hour': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
+        //                         break;
+        //                     case 'daily': 
+        //                         this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
+        //                         break;
+        //                 }
+        //             }
+        //         )}
+        //         catch(e){
+        //             console.log('failed')
+        //         }
+        //     })
 
             
-        })
+        // })
 
         StockDatabaseServer.TICKERS.forEach((symbol) => {
             try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
@@ -95,7 +96,6 @@ export class StockDatabaseServer {
             client.connect((connectError: Error)=>{
                 if(connectError)
                     return reject(connectError.message)
-                    console.log('error')
     
             client.query(query, (queryError: Error, queryResult: QueryResult)=>{
                 if(queryError)
