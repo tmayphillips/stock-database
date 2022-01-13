@@ -23,33 +23,24 @@ var StockDatabaseServer = /** @class */ (function () {
             console.log('Running server on port %s', _this.port);
         });
         StockDatabaseServer.SYMBOLS.forEach(function (symbol) {
-            console.log(symbol);
             StockDatabaseServer.TIMEFRAMES.forEach(function (timeframe) {
-                console.log(timeframe);
                 try {
                     StockDatabaseServer.doQuery("SELECT * FROM ".concat(timeframe, "_prices WHERE Symbol = '").concat(symbol.toUpperCase(), "'"))
                         .then(function (resp) {
-                        console.log('.then');
                         var getStockData = function (request, response, next) {
-                            console.log(resp.rows);
                             response.status(200).json(resp.rows);
                         };
-                        console.log(getStockData);
                         switch (timeframe) {
                             case 'min5':
-                                console.log("/".concat(symbol, "/5/minute"));
                                 _this.app.get("/".concat(symbol.toLowerCase(), "/5/minute"), getStockData);
                                 break;
                             case 'min15':
-                                console.log("/".concat(symbol, "/15/minute"));
                                 _this.app.get("/".concat(symbol.toLowerCase(), "/15/minute"), getStockData);
                                 break;
                             case 'hour':
-                                console.log("/".concat(symbol, "/1/hour"));
                                 _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
                                 break;
                             case 'daily':
-                                console.log("/".concat(symbol, "/1/day"));
                                 _this.app.get("/".concat(symbol.toLowerCase(), "/1/day"), getStockData);
                                 break;
                         }
@@ -59,13 +50,26 @@ var StockDatabaseServer = /** @class */ (function () {
                     console.log('failed');
                 }
             });
+            try {
+                StockDatabaseServer.doQuery("SELECT * FROM tickers WHERE Ticker = '".concat(symbol.toUpperCase(), "'"))
+                    .then(function (resp) {
+                    var getTickerInfo = function (request, response, next) {
+                        console.log(resp.rows);
+                        response.status(200).json(resp.rows);
+                        _this.app.get("/".concat(symbol.toLowerCase(), "/info"), getTickerInfo);
+                    };
+                });
+            }
+            catch (e) {
+                console.log('failed');
+            }
         });
     };
     StockDatabaseServer.prototype.getApp = function () {
         return this.app;
     };
     StockDatabaseServer.PORT = 8080; // Default local port
-    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC'];
+    StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {

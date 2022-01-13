@@ -10,20 +10,20 @@ from urllib3.util.retry import Retry
 
 #%%
 # Set some constant variables, I could put all of this in a seperate config file
-ALPACA_API_KEY = 'e_utOCyEUkbpbTgaYfooP7RXuq1C8T5R'
+#ALPACA_API_KEY = 'e_utOCyEUkbpbTgaYfooP7RXuq1C8T5R'
 #ALPACA_API_KEY = 'vKlpDwCiXuBQit_iGLM3pdZirt4m8xjt'
 #ALPACA_API_KEY = 'x4S54nJ8Ct0C2XC6ZV2ltgHIGXqQ9Pe8'
-#ALPACA_API_KEY = 'pEC35aiLgX8BZFDj9QjjTGrzDsYgYgLK'
+ALPACA_API_KEY = 'pEC35aiLgX8BZFDj9QjjTGrzDsYgYgLK'
 
-START_DATE = '2021-01-01'
+START_DATE = '2021-01-11'
 END_DATE = '2022-01-13'
 # URL for all the tickers on Polygon
 POLYGON_TICKERS_URL = 'https://api.polygon.io/v2/reference/tickers?page={}&apiKey={}'
 # URL FOR PRICING DATA - Note, getting pricing that is UNADJUSTED for splits, I will try and adjust those manually
 
 
-#POLYGON_AGGS_URL = 'https://api.polygon.io/v2/aggs/ticker/{}/range/1/day/{}/{}?unadjusted=true&apiKey={}'
-POLYGON_AGGS_URL = 'https://api.polygon.io/v2/aggs/ticker/{}/range/1/day/{}/{}?unadjusted=true&apiKey={}'
+POLYGON_AGGS_URL = 'https://api.polygon.io/v2/aggs/ticker/{}/range/5/minute/{}/{}?unadjusted=true&apiKey={}'
+#POLYGON_AGGS_URL = 'https://api.polygon.io/v2/aggs/ticker/{}/range/15/min/{}/{}?unadjusted=true&apiKey={}'
 
 
 # URL FOR DIVIDEND DATA
@@ -348,7 +348,7 @@ symbols = combine_tickers('data/tickers')
 symbols = filter_us_exch(symbols)
 
 #%% Create own list of symbols
-symbols = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
+symbols = ['AAPL']
 # symbols = ['NBR', 'GOOG', 'AXP', 'COF', 'WFC']
 # symbols = ['MSFT', 'FB', 'AMZN', 'GS', 'MS']
 # symbols = ['V', 'GME', 'NFLX', 'KO', 'JNJ']
@@ -358,7 +358,7 @@ symbols = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
 
 
 #%% Get all the aggregated bar/pricing data for each symbol in the filtered list
-get_bars(symbols, 'daily-data', START_DATE, END_DATE)
+get_bars(symbols, '5min-data', START_DATE, END_DATE)
 
 #%%  Pull in all the stock splits
 get_splits(symbols, 'data/splits')

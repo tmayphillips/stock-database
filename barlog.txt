@@ -1,5 +1,1 @@
-AAPL file created with record count 259
-TSLA file created with record count 259
-NVDA file created with record count 259
-JPM file created with record count 259
-BAC file created with record count 259
+AAPL file created with record count 5000

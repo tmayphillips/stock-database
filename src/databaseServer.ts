@@ -5,7 +5,7 @@ import {QueryResult, Client} from 'pg'
 
 export class StockDatabaseServer {
     public static readonly PORT: number = 8080 // Default local port
-    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
+    public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
 
     private app: express.Application
@@ -32,32 +32,23 @@ export class StockDatabaseServer {
         })
 
         StockDatabaseServer.SYMBOLS.forEach((symbol) => {
-            console.log(symbol)
             StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
-                console.log(timeframe)
                 try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
                     .then((resp: QueryResult)=>  {
-                        console.log('.then')
                         const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                        console.log(resp.rows)
                         response.status(200).json(resp.rows)
                         }
-                        console.log(getStockData)
                         switch(timeframe) {
                             case 'min5': 
-                                console.log(`/${symbol}/5/minute`)
                                 this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
                                 break;
                             case 'min15': 
-                                console.log(`/${symbol}/15/minute`)
                                 this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
                                 break;
                             case 'hour': 
-                                console.log(`/${symbol}/1/hour`)
                                 this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
                                 break;
                             case 'daily': 
-                                console.log(`/${symbol}/1/day`)
                                 this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
                                 break;
                         }
@@ -67,9 +58,21 @@ export class StockDatabaseServer {
                     console.log('failed')
                 }
             })
-            
+
+            try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
+                .then((resp: QueryResult)=>  {
+                    const getTickerInfo = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+                    console.log(resp.rows)
+                    response.status(200).json(resp.rows)
+                    this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
+                    }
+                
+                }
+            )}
+            catch(e){
+                console.log('failed')
+            }
         })
-        
     }
 
     public getApp(): express.Application {

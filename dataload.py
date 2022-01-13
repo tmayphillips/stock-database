@@ -19,8 +19,8 @@ db_password = '8e2e84a5507c45cf3c54802e97948abd2ebb73ad29453ec3558f64cbe02469e7'
 engine = create_engine('postgresql://vujwyosxlhitrw:{}@ec2-3-228-236-221.compute-1.amazonaws.com/djvd7ebilq70q'.format(db_password))
 
 # Set some variables of where the CSV files are containing the pricing and ticker information
-bars_path = 'daily-data'
-# tickers_path = 'data/tickers'
+bars_path = '5min-data'
+tickers_path = 'tickers'
 
 
 #%%
@@ -38,10 +38,10 @@ def create_prices_table(symbol):
 
     # Write the data into the database, this is so fucking cool
     #df.to_sql('daily_prices', engine, if_exists='replace', index=False)
-    df.to_sql('daily_prices', engine, if_exists='replace', index=False)
+    df.to_sql('min5_prices', engine, if_exists='replace', index=False)
 
     # Create a primary key on the table
-    query = """ALTER TABLE daily_prices 
+    query = """ALTER TABLE min5_prices 
                 ADD PRIMARY KEY (symbol, date);"""
     engine.execute(query)
     
@@ -57,7 +57,7 @@ def import_bar_file(symbol):
     df = pd.read_csv(path, index_col=[0], parse_dates=[0])
     
     # First part of the insert statement
-    insert_init = """INSERT INTO daily_prices
+    insert_init = """INSERT INTO min5_prices
                     (date, volume, open, close, high, low, symbol)
                     VALUES
                 """
@@ -93,7 +93,7 @@ def import_bar_file(symbol):
 def process_symbols():
     # symbols = [s[:-4] for s in os.listdir(bars_path)]
 
-    symbols = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
+    symbols = ['AAPL','TSLA', 'NVDA', 'JPM', 'BAC']
     # symbols = ['NBR', 'GOOG', 'AXP', 'COF', 'WFC']
     # symbols = ['MSFT', 'FB', 'AMZN', 'GS', 'MS']
     # symbols = ['V', 'GME', 'NFLX', 'KO', 'JNJ']
@@ -114,11 +114,11 @@ process_symbols()
 #%%
 def process_tickers():
     # Read in the tickers file from a csv
-    df = pd.read_csv('{}/polygon_tickers_us.csv'.format(tickers_path))
+    df = pd.read_csv('{}/ticker-list.csv'.format(tickers_path))
 
     # Formatting
-    df = df[['ticker', 'name', 'market', 'locale', 'type', 'currency', 'active', 'primaryExch', 'updated']]
-    df.rename(columns={'ticker': 'symbol', 'name': 'symbol_name', 'primaryExch': 'primary_exch'}, inplace=True)
+    df = df[['ticker', 'name', 'locale', 'primary_exchange', 'type', 'currency_name', 'phone_number', 'address', 'city', 'state', 'postal_code', 'homepage_url', 'logo_url', 'icon_url', 'sic_description', 'description']]
+    # df.rename(columns={'ticker': 'symbol', 'name': 'symbol_name', 'primaryExch': 'primary_exch'}, inplace=True)
     df['updated'] = pd.to_datetime('now')
 
     # Run this once to create the table
@@ -126,7 +126,7 @@ def process_tickers():
     
     # Add a primary key to the symbol
     query = """ALTER TABLE tickers
-                ADD PRIMARY KEY (symbol);"""
+                ADD PRIMARY KEY (ticker);"""
     engine.execute(query)
     
     return 'Tickers table created'
