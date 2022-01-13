@@ -34,51 +34,51 @@ export class StockDatabaseServer {
             console.log('Running server on port %s', this.port)
         })
 
-        // StockDatabaseServer.SYMBOLS.forEach((symbol) => {
-        //     StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
-        //         try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
-        //             .then((resp: QueryResult)=>  {
-        //                 const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        //                     response.status(200).json(resp.rows)
-        //                 }
-        //                 switch(timeframe) {
-        //                     case 'min5': 
-        //                         this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
-        //                         break;
-        //                     case 'min15': 
-        //                         this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
-        //                         break;
-        //                     case 'hour': 
-        //                         this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
-        //                         break;
-        //                     case 'daily': 
-        //                         this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
-        //                         break;
-        //                 }
-        //             }
-        //         )}
-        //         catch(e){
-        //             console.log('failed')
-        //         }
-        //     })
-
-            
-        // })
-
-        StockDatabaseServer.TICKERS.forEach((symbol) => {
-            try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
-                .then((resp: QueryResult)=>  {
-                    const getTickerInfo = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                        response.status(200).json(resp.rows)
+        StockDatabaseServer.SYMBOLS.forEach((symbol) => {
+            StockDatabaseServer.TIMEFRAMES.forEach((timeframe) => {
+                try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
+                    .then((resp: QueryResult)=>  {
+                        const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+                            response.status(200).json(resp.rows)
+                        }
+                        switch(timeframe) {
+                            case 'min5': 
+                                this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
+                                break;
+                            case 'min15': 
+                                this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
+                                break;
+                            case 'hour': 
+                                this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
+                                break;
+                            case 'daily': 
+                                this.app.get(`/${symbol.toLowerCase()}/1/day`, getStockData);
+                                break;
+                        }
                     }
-                
-                    this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
-                }
                 )}
                 catch(e){
                     console.log('failed')
                 }
+            })
+
+            
         })
+
+        // StockDatabaseServer.TICKERS.forEach((symbol) => {
+        //     try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
+        //         .then((resp: QueryResult)=>  {
+        //             const getTickerInfo = (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        //                 response.status(200).json(resp.rows)
+        //             }
+                
+        //             this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
+        //         }
+        //         )}
+        //         catch(e){
+        //             console.log('failed')
+        //         }
+        // })
     }
 
     public getApp(): express.Application {
