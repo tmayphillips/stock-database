@@ -8,7 +8,7 @@ export class StockDatabaseServer {
     public static readonly SYMBOLS: string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC']
     public static readonly TIMEFRAMES: string[] = ['min5', 'min15', 'hour', 'daily']
     // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
-    public static readonly TICKERS:string[] = ['JPM']
+    public static readonly TICKERS:string[] = ['NBR']
     // public static readonly TICKERS:string[] = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC','NBR', 'GOOG', 'AXP', 'COF', 'WFC', 'MSFT', 'FB', 'AMZN', 'GS', 'MS', 'V', 'GME', 'NFLX', 'KO', 'JNJ', 'CRM', 'PYPL', 'XOM', 'HD', 'DIS', 'INTC', 'COP', 'CVX', 'SBUX', 'OXY', 'WMT', 'MPC', 'SLB', 'PSX', 'VLO']
 
     private app: express.Application

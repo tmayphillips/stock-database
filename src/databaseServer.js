@@ -72,7 +72,7 @@ var StockDatabaseServer = /** @class */ (function () {
     StockDatabaseServer.SYMBOLS = ['AAPL', 'TSLA', 'NVDA', 'JPM', 'BAC'];
     StockDatabaseServer.TIMEFRAMES = ['min5', 'min15', 'hour', 'daily'];
     // TICKERS only to be used while building stock database, then all can be moved to SYMBOLS
-    StockDatabaseServer.TICKERS = ['JPM'];
+    StockDatabaseServer.TICKERS = ['NBR'];
     StockDatabaseServer.doQuery = function (query) {
         return new Promise(function (resolve, reject) {
             var client = new pg_1.Client({
