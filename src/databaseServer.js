@@ -54,10 +54,9 @@ var StockDatabaseServer = /** @class */ (function () {
                 StockDatabaseServer.doQuery("SELECT * FROM tickers WHERE Ticker = '".concat(symbol.toUpperCase(), "'"))
                     .then(function (resp) {
                     var getTickerInfo = function (request, response, next) {
-                        console.log(resp.rows);
                         response.status(200).json(resp.rows);
-                        _this.app.get("/".concat(symbol.toLowerCase(), "/info"), getTickerInfo);
                     };
+                    _this.app.get("/".concat(symbol.toLowerCase(), "/info"), getTickerInfo);
                 });
             }
             catch (e) {

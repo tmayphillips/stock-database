@@ -36,7 +36,7 @@ export class StockDatabaseServer {
                 try{StockDatabaseServer.doQuery(`SELECT * FROM ${timeframe}_prices WHERE Symbol = '${symbol.toUpperCase()}'`)
                     .then((resp: QueryResult)=>  {
                         const getStockData = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                        response.status(200).json(resp.rows)
+                            response.status(200).json(resp.rows)
                         }
                         switch(timeframe) {
                             case 'min5': 
@@ -62,11 +62,10 @@ export class StockDatabaseServer {
             try{StockDatabaseServer.doQuery(`SELECT * FROM tickers WHERE Ticker = '${symbol.toUpperCase()}'`)
                 .then((resp: QueryResult)=>  {
                     const getTickerInfo = (request: express.Request, response: express.Response, next: express.NextFunction) => {
-                    console.log(resp.rows)
-                    response.status(200).json(resp.rows)
-                    this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
+                        response.status(200).json(resp.rows)
                     }
                 
+                    this.app.get(`/${symbol.toLowerCase()}/info`, getTickerInfo);
                 }
             )}
             catch(e){
