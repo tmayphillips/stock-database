@@ -7,6 +7,7 @@ var http = require("http");
 var pg_1 = require("pg");
 var StockDatabaseServer = /** @class */ (function () {
     function StockDatabaseServer() {
+        this.router = express.Router();
         this.createApp();
         this.listen();
     }
@@ -32,16 +33,20 @@ var StockDatabaseServer = /** @class */ (function () {
                         };
                         switch (timeframe) {
                             case 'min5':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/5/minute"), getStockData);
+                                _this.router.route("/".concat(symbol.toLowerCase(), "/5/minute"));
+                                //this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
                                 break;
                             case 'min15':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/15/minute"), getStockData);
+                                _this.router.route("/".concat(symbol.toLowerCase(), "/15/minute"));
+                                // this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
                                 break;
                             case 'hour':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
+                                _this.router.route("/".concat(symbol.toLowerCase(), "/1/hour"));
+                                //this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
                                 break;
                             case 'daily':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/daily"), getStockData);
+                                _this.router.route("/".concat(symbol.toLowerCase(), "/daily"));
+                                //this.app.get(`/${symbol.toLowerCase()}/daily`, getStockData);
                                 break;
                         }
                     });

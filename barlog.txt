@@ -1,5 +1,5 @@
-NBR file created with record count 5000
-GOOG file created with record count 5000
-AXP file created with record count 5000
-COF file created with record count 5000
-WFC file created with record count 5000
+NBR file created with record count 1333
+GOOG file created with record count 3395
+AXP file created with record count 3648
+COF file created with record count 3593
+WFC file created with record count 4972
