@@ -52,7 +52,7 @@ export class StockDatabaseServer {
                                 this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
                                 break;
                             case 'daily': 
-                                this.app.get(`/${symbol.toLowerCase()}/1day`, getStockData);
+                                this.app.get(`/${symbol.toLowerCase()}/daily`, getStockData);
                                 break;
                         }
                     }

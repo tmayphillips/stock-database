@@ -41,7 +41,7 @@ var StockDatabaseServer = /** @class */ (function () {
                                 _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
                                 break;
                             case 'daily':
-                                _this.app.get("/".concat(symbol.toLowerCase(), "/1day"), getStockData);
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/daily"), getStockData);
                                 break;
                         }
                     });
