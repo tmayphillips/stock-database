@@ -40,13 +40,13 @@ engine = create_engine('postgresql://vujwyosxlhitrw:{}@ec2-3-228-236-221.compute
 
 #%%
 # # Define get bar data for the symbols, import to database
-symbols = ['AAPL','TSLA', 'NVDA', 'JPM', 'BAC']
-    # symbols = ['NBR', 'GOOG', 'AXP', 'COF', 'WFC']
-    # symbols = ['MSFT', 'FB', 'AMZN', 'GS', 'MS']
-    # symbols = ['V', 'GME', 'NFLX', 'KO', 'JNJ']
-    # symbols = ['CRM', 'PYPL', 'XOM', 'HD', 'DIS']
-    # symbols = ['INTC', 'COP', 'CVX', 'SBUX', 'OXY']
-    # symbols = ['WMT', 'MPC', 'SLB', 'PSX', 'VLO']
+#symbols = ['AAPL','TSLA', 'NVDA', 'JPM', 'BAC']
+symbols = ['NBR', 'GOOG', 'AXP', 'COF', 'WFC']
+# symbols = ['MSFT', 'FB', 'AMZN', 'GS', 'MS']
+# symbols = ['V', 'GME', 'NFLX', 'KO', 'JNJ']
+# symbols = ['CRM', 'PYPL', 'XOM', 'HD', 'DIS']
+# symbols = ['INTC', 'COP', 'CVX', 'SBUX', 'OXY']
+# symbols = ['WMT', 'MPC', 'SLB', 'PSX', 'VLO']
 def get_bars(symbolslist, outdir, start, end, url, key):
 
     session = requests.Session()
@@ -141,9 +141,12 @@ def import_bar_file(symbol, bars_path, database):
     # Fire insert statement
     engine.execute(query)
 
+#get_bars(symbols, 'daily-data', '2021-01-01', END_DATE, POLYGON_AGGS_URL_1DAY, POLYGON_API_KEY_NEWS)
+
+
 # This function will loop through all the files in the directory and process the CSV files
 def process_symbols():
-
+    
     for symbol in tqdm_notebook(symbols, desc='Importing...'):
         import_bar_file(symbol, '5min-data', 'min5_prices')
         import_bar_file(symbol, '15min-data', 'min15_prices')
@@ -151,6 +154,7 @@ def process_symbols():
         import_bar_file(symbol, 'daily-data', 'daily_prices')
 
     return 'Process symbols complete'        
+    
 
 #%% 
 # Get bar data for each symbol and week

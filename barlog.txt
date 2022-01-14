@@ -1,5 +1,5 @@
-AAPL file created with record count 5000
-TSLA file created with record count 5000
-NVDA file created with record count 5000
-JPM file created with record count 5000
-BAC file created with record count 5000
+NBR file created with record count 5000
+GOOG file created with record count 5000
+AXP file created with record count 5000
+COF file created with record count 5000
+WFC file created with record count 5000
