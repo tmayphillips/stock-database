@@ -11,6 +11,8 @@ from urllib3.util.retry import Retry
 #%%
 # Set some constant variables, I could put all of this in a seperate config file
 #ALPACA_API_KEY = 'e_utOCyEUkbpbTgaYfooP7RXuq1C8T5R'
+
+
 #ALPACA_API_KEY = 'vKlpDwCiXuBQit_iGLM3pdZirt4m8xjt'
 #ALPACA_API_KEY = 'x4S54nJ8Ct0C2XC6ZV2ltgHIGXqQ9Pe8'
 ALPACA_API_KEY = 'pEC35aiLgX8BZFDj9QjjTGrzDsYgYgLK'

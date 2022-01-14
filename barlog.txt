@@ -1,1 +1,5 @@
 AAPL file created with record count 5000
+TSLA file created with record count 5000
+NVDA file created with record count 5000
+JPM file created with record count 5000
+BAC file created with record count 5000
