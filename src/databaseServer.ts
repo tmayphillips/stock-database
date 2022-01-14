@@ -44,20 +44,20 @@ export class StockDatabaseServer {
                         }
                         switch(timeframe) {
                             case 'min5': 
-                                this.router.route(`/${symbol.toLowerCase()}/5/minute`)
-                                //this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
+                                // this.router.route(`/${symbol.toLowerCase()}/5/minute`)
+                                this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
                                 break;
                             case 'min15': 
-                                this.router.route(`/${symbol.toLowerCase()}/15/minute`)
-                               // this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/15/minute`)
+                               this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
                                 break;
                             case 'hour': 
-                                this.router.route(`/${symbol.toLowerCase()}/1/hour`)
-                                //this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/1/hour`)
+                                this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
                                 break;
                             case 'daily': 
-                                this.router.route(`/${symbol.toLowerCase()}/daily`)
-                                //this.app.get(`/${symbol.toLowerCase()}/daily`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/daily`)
+                                this.app.get(`/${symbol.toLowerCase()}/daily`, getStockData);
                                 break;
                         }
                     }

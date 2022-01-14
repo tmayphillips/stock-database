@@ -33,20 +33,20 @@ var StockDatabaseServer = /** @class */ (function () {
                         };
                         switch (timeframe) {
                             case 'min5':
-                                _this.router.route("/".concat(symbol.toLowerCase(), "/5/minute"));
-                                //this.app.get(`/${symbol.toLowerCase()}/5/minute`, getStockData);
+                                // this.router.route(`/${symbol.toLowerCase()}/5/minute`)
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/5/minute"), getStockData);
                                 break;
                             case 'min15':
-                                _this.router.route("/".concat(symbol.toLowerCase(), "/15/minute"));
-                                // this.app.get(`/${symbol.toLowerCase()}/15/minute`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/15/minute`)
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/15/minute"), getStockData);
                                 break;
                             case 'hour':
-                                _this.router.route("/".concat(symbol.toLowerCase(), "/1/hour"));
-                                //this.app.get(`/${symbol.toLowerCase()}/1/hour`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/1/hour`)
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/1/hour"), getStockData);
                                 break;
                             case 'daily':
-                                _this.router.route("/".concat(symbol.toLowerCase(), "/daily"));
-                                //this.app.get(`/${symbol.toLowerCase()}/daily`, getStockData);
+                                //this.router.route(`/${symbol.toLowerCase()}/daily`)
+                                _this.app.get("/".concat(symbol.toLowerCase(), "/daily"), getStockData);
                                 break;
                         }
                     });
